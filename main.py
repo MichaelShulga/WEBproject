@@ -1,3 +1,4 @@
+import argparse
 import os
 
 from flask import Flask, render_template, redirect, request, abort
@@ -8,6 +9,11 @@ from forms.user import RegisterForm, LoginForm
 from data.users import User
 from data import db_session
 from app_api import users_resources
+
+
+params = argparse.ArgumentParser()
+params.add_argument('--heroku', action='store_true')
+args = params.parse_args()
 
 app = Flask(__name__)
 api = Api(app)
@@ -78,15 +84,18 @@ def index():
 
 def main():
     # database initialization
-    db_session.global_init("db/blogs.db")
+    db_session.global_init("db/main.db")
 
     # User class API
     api.add_resource(users_resources.UserListResource, '/api/v2/users')
     api.add_resource(users_resources.UserResource, '/api/v2/users/<int:user_id>')
 
-    app.run(port=8090, host='127.0.0.1', debug=True)
+    if args.heroku:
+        port = int(os.environ.get("PORT", 5000))
+        app.run(host='0.0.0.0', port=port)
+    else:
+        app.run(port=8090, host='127.0.0.1', debug=True)
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    main()

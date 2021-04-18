@@ -12,7 +12,7 @@ def abort_if_user_not_found(user_id):
         abort(404, message=f"User {user_id} not found")
 
 
-user_params = ('id', 'name', 'about', 'email', 'created_date', 'city_from')
+user_params = ('id', 'email', 'created_date')
 
 
 class UserResource(Resource):
@@ -35,10 +35,7 @@ class UserResource(Resource):
 # create user - UserListResource.post()
 parser = reqparse.RequestParser()
 parser.add_argument('id', required=True, type=int)
-parser.add_argument('name', required=True)
-parser.add_argument('about', required=True)
 parser.add_argument('email', required=True)
-parser.add_argument('city_from', required=True)
 parser.add_argument('password', required=True)
 
 

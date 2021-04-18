@@ -93,7 +93,7 @@ def main():
         port = int(os.environ.get("PORT", 5000))
         app.run(host='0.0.0.0', port=port)
     else:  # run on my pc
-        app.run(port=8090, host='127.0.0.1', debug=True)
+        app.run(port=8091, host='127.0.0.1', debug=True)
 
 
 if __name__ == '__main__':

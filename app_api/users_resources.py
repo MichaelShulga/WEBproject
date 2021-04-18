@@ -43,6 +43,8 @@ class UserListResource(Resource):
     def get(self):
         session = db_session.create_session()
         users = session.query(User).all()
+        for item in users:
+            print(item)
         return jsonify({'users': [item.to_dict(
             only=user_params) for item in users]})
 

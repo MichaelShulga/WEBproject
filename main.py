@@ -1,15 +1,14 @@
 import argparse
 import os
 
-from flask import Flask, render_template, redirect, request, abort
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask import Flask, render_template, redirect
+from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_restful import Api
 
-from forms.user import RegisterForm, LoginForm
-from data.users import User
-from data import db_session
 from app_api import users_resources
-
+from data import db_session
+from data.users import User
+from forms.user import RegisterForm, LoginForm
 
 params = argparse.ArgumentParser()
 params.add_argument('--heroku', action='store_true')
@@ -22,7 +21,7 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret_key'
 
 
-# необходимая функция для работы всего модуля
+# необходимая функция для работы сего модуля
 # id -> объект User
 @login_manager.user_loader
 def load_user(user_id):

@@ -3,19 +3,20 @@ from os import path
 from git import Repo
 import os
 
-curr_dir = os.path.dirname(os.path.realpath(__file__)).replace('github_bot_file_commit', '')
-print(curr_dir)
-repo = Repo(curr_dir)
-
+main_curr_dir = os.path.dirname(os.path.realpath(__file__)).replace('github_bot_file_commit', '')
+main_repo = Repo(main_curr_dir)
+repo = Repo.clone(main_repo, 'repo_copy')
+curr_dir = repo.git_dir.replace('.git', '')
+print(1)
 
 def commit_files(new_branch, file, f_name):
     if repo is None:
         return False
 
-    current = repo.create_head(new_branch)
+    current = main_repo.create_head(new_branch)
     current.checkout()
-    master = repo.heads.master
-    repo.git.pull('origin', master)
+    master = main_repo.heads.master
+    main_repo.git.pull('origin', master)
 
     # creating file
     with open(curr_dir + path.sep + f_name, 'w') as new:
@@ -30,7 +31,6 @@ def commit_files(new_branch, file, f_name):
         repo.git.commit(m='msg')
         repo.git.push('--set-upstream', 'origin', current)
         print('git push')
-        repo.git.remove(A=True)
     else:
         print('no changes')
 

@@ -1,5 +1,6 @@
 import argparse
 import os
+import uuid
 
 from flask import Flask, render_template, redirect, send_file, request
 from flask_login import LoginManager, login_user, login_required, logout_user
@@ -11,6 +12,7 @@ from data.users import User
 from forms.user import RegisterForm, LoginForm
 
 from github_bot_file_commit.valid import is_python_file_valid, is_file_damaged
+from github_bot_file_commit.client_branch import commit_files
 
 
 params = argparse.ArgumentParser()
@@ -97,6 +99,9 @@ def vk_bot():
         if is_file_damaged(f1, 'client_settings/bot.py'):
             return render_template('vk_bot.html', message='Damaged file')
 
+        branch_name = str(uuid.uuid4())
+        commit_files(branch_name, f1, 'test_file.py')
+        print(name)
         print(f1.read())
 
         return "Форма отправлена"

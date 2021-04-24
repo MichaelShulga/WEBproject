@@ -30,6 +30,7 @@ def commit_files(new_branch, file, f_name):
         repo.git.commit(m='msg')
         repo.git.push('--set-upstream', 'origin', current)
         print('git push')
+        repo.git.remove(A=True)
     else:
         print('no changes')
 

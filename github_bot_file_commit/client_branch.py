@@ -1,9 +1,11 @@
+import sys
 from time import *
 from os import path
 from git import Repo
 import os
 
-curr_dir = os.path.dirname(os.path.realpath(__file__)).replace('github', '')
+print(os.path.basename(sys.path[1]))
+curr_dir = os.path.dirname(os.path.realpath(__file__)).replace('github_bot_file_commit', '')
 print(curr_dir)
 repo = Repo(curr_dir)
 

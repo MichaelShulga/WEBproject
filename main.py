@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, send_file, request
 from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_restful import Api
 
@@ -9,6 +9,9 @@ from app_api import users_resources
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm, LoginForm
+
+from github_bot_file_commit.valid import is_python_file_valid, is_file_damaged
+
 
 params = argparse.ArgumentParser()
 params.add_argument('--heroku', action='store_true')
@@ -79,6 +82,30 @@ def logout():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/vk_bot', methods=['POST', 'GET'])
+def vk_bot():
+    if request.method == 'GET':
+        return render_template('vk_bot.html')
+    elif request.method == 'POST':
+        f1 = request.files['file']
+        if not f1:
+            return render_template('vk_bot.html', message='Choose file')
+        if not is_python_file_valid(f1):
+            return render_template('vk_bot.html', message='Invalid file')
+        if is_file_damaged(f1, 'client_settings/bot.py'):
+            return render_template('vk_bot.html', message='Damaged file')
+
+        print(f1.read())
+
+        return "Форма отправлена"
+
+
+@app.route('/download_file_vk_bot')
+def download_file_vk_bot():
+    path = "client_settings/bot.py"
+    return send_file(path, as_attachment=True)
 
 
 def main():

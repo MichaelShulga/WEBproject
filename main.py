@@ -100,8 +100,8 @@ def vk_bot():
             return render_template('vk_bot.html', message='Damaged file')
 
         branch_name = str(uuid.uuid4())
-        commit_files(branch_name, f1, 'test_file.py')
-        print(name)
+        commit_files(branch_name, f1, 'client_settings\\bot.py')
+        print(branch_name)
         print(f1.read())
 
         return "Форма отправлена"
